@@ -1,0 +1,92 @@
+import React, { useState, useEffect } from 'react'
+import { Col, Form, Input, Row } from 'antd'
+import { useSelector } from 'react-redux'
+import axios from 'axios'
+import { toast } from 'react-toastify'
+const UserProfile = () => {
+    const [user, setUser] = useState()
+    const getUserProfile = async (req, res) => {
+        try {
+            const res = await axios.get("/api/v1/user/getUserProfile", {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem("token")}`
+                }
+            })
+            if (res.data.success) {
+                setUser(res.data.data)
+            }
+            else {
+                toast.error(res.data.message)
+            }
+        } catch (error) {
+            console.log(error)
+            toast.error("Something Went Wrong")
+        }
+
+    }
+
+    useEffect(() => {
+        getUserProfile()
+    }, [])
+    const handleSubmit = async (values) => {
+        try {
+            const res = await axios.post("/api/v1/user/updateUserProfile", {
+                ...values
+            }, {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem("token")}`
+                }
+            })
+            if (res.data.success) {
+                toast.success(res.data.message)
+                setUser(res.data.data)
+            } else {
+                toast.error(res.data.message)
+            }
+
+        } catch (error) {
+            toast.error("Something went wrong")
+        }
+    }
+
+    return <>
+        <h1 className="text-center p-2 text-white"
+            style={{
+                backgroundColor: "rgb(37, 51, 77)"
+            }}
+        >  Manage User Profile </h1>
+        {user && (
+            <Form
+                onFinish={handleSubmit}
+                initialValues={{ ...user }}>
+                <Row className="mt-5 ms-5 mb-2 fs-1" gutter={20}>
+                    <Col xs={24} md={24} lg={18}
+                    >
+
+                        <Form.Item label="Name" name="name"
+                        >
+                            <Input type="text" />
+                        </Form.Item>
+                    </Col>
+                </Row>
+                <Row className="mt-2 ms-5 mb-4" gutter={20}>
+                    <Col xs={24} md={24} lg={18} >
+                        <Form.Item label="Email" name="email"
+                        >
+                            <Input type="text" />
+                        </Form.Item>
+                    </Col>
+                </Row>
+                <Row>
+                    <Col xs={24} className="m-auto" md={24} lg={3}>
+                        <button className="btn btn-success">Update</button>
+                    </Col>
+                </Row>
+            </Form>
+        )
+        }
+    </>
+
+}
+
+export default UserProfile

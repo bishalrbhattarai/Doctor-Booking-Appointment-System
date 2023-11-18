@@ -1,0 +1,35 @@
+.sidebar {
+    background-color: rgb(37, 51, 77);
+    border-radius: 10px;
+}
+
+.div-menu a {
+    font-size: 1.2rem;
+    text-decoration: none;
+}
+
+.div-menu i {
+    font-size: 1.2rem;
+}
+
+.change {
+    background-color: white;
+    color: black;
+}
+
+.div-menu#change {
+    background-color: white;
+    color: black;
+}
+
+a {
+    color: white;
+}
+
+a.active {
+    color: black;
+}
+
+/* .div-menu i {
+    color: white;
+} */
